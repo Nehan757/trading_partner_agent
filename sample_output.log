@@ -1,0 +1,147 @@
+────────────────────────────────────────────────────────────
+  Stage 1 — Loading partner data
+────────────────────────────────────────────────────────────
+  Loaded 5 partners.
+
+────────────────────────────────────────────────────────────
+  Stage 2 — Validating fields (deterministic)
+────────────────────────────────────────────────────────────
+  Al Futtaim LLC: 3 issue(s) — trn, address, peppol_id
+  Carrefour UAE: 2 issue(s) — email, address
+  Noon Commerce: 3 issue(s) — trn, address, peppol_id
+  Emirates NBD: 2 issue(s) — address, peppol_id
+  Aramex International: 3 issue(s) — trn, address, peppol_id
+
+────────────────────────────────────────────────────────────
+  Stage 3 — Generating outreach emails (LLM)
+────────────────────────────────────────────────────────────
+
+  ┌─ Email to Al Futtaim LLC ──────────────────────────
+  │ Dear Al Futtaim LLC team,
+  │
+  │ I hope this message finds you well. We are currently processing your account and noticed some missing or invalid trading partner information that requires your attention:
+  │
+  │ 1. **TRN**: Missing. Please provide a 15-digit Tax Registration Number.
+  │ 2. **Address**: The provided address is unstructured. We need a full billing address formatted as: street, city, postal code. For example, "123 Main St, Dubai, 12345".
+  │ 3. **PEPPOL ID**: Missing. Please provide your Peppol network ID in the format: scheme:value (e.g., 0088:1234567890123).
+  │
+  │ Additionally, please confirm a valid invoicing contact email address.
+  │
+  │ Thank you for your prompt attention to these details.
+  │
+  │ Best regards,
+  │ [Your Name]
+  │ Accounts Payable Coordinator
+  └──────────────────────────────────────────────────
+
+  ⚠ Carrefour UAE: skipped — no valid email address
+
+  ┌─ Email to Noon Commerce ───────────────────────────
+  │ Dear Noon Commerce team,
+  │
+  │ I hope this message finds you well. We are currently processing your trading partner information and noticed a few discrepancies that need your attention:
+  │
+  │ 1. **TRN**: The Tax Registration Number must be exactly 15 digits. The provided TRN '10031234560000399' has 17 characters and is therefore invalid.
+  │
+  │ 2. **Address**: We are missing a full structured billing address. Please include the street, city, and postal code, separated by commas.
+  │
+  │ 3. **Peppol ID**: The Peppol network ID is also missing. It should be in the format of scheme:value (e.g., 0088:1234567890123).
+  │
+  │ Please provide the corrected information at your earliest convenience. Thank you for your cooperation!
+  │
+  │ Best regards,
+  │ [Your Name]
+  │ [Your Position]
+  │ [Your Company]
+  └──────────────────────────────────────────────────
+
+  ┌─ Email to Emirates NBD ────────────────────────────
+  │ Dear Emirates NBD team,
+  │
+  │ I hope this message finds you well. We are currently processing your trading partner information and have identified some missing or invalid details that need your attention.
+  │
+  │ 1. **Address**: The provided address "Sheikh Zayed Road Dubai" is unstructured. Please provide a complete address in the required format: street, city, and postal code, separated by commas (e.g., "123 Main St, Dubai, 00000").
+  │
+  │ 2. **Peppol ID**: We noticed that the Peppol ID is missing. Please provide it in the required scheme:value format (e.g., 0088:1234567890123).
+  │
+  │ Your prompt assistance in providing this information will help us ensure smooth processing. Thank you for your cooperation.
+  │
+  │ Best regards,
+  │ [Your Name]
+  │ Accounts Payable Coordinator
+  └──────────────────────────────────────────────────
+
+  ┌─ Email to Aramex International ────────────────────
+  │ Dear Aramex International team,
+  │
+  │ I hope this message finds you well. We are currently missing some essential trading partner information required for processing your invoices. Specifically, we need the following:
+  │
+  │ 1. **TRN**: Your Tax Registration Number is missing. It must be exactly 15 digits.
+  │ 2. **Address**: The full structured billing address is missing. Please provide the street, city, and postal code, separated by commas.
+  │ 3. **Peppol ID**: This is also missing. It should be in the format scheme:value (e.g., 0088:1234567890123).
+  │
+  │ Please provide this information at your earliest convenience to ensure smooth processing of your invoices.
+  │
+  │ Thank you for your attention to this matter.
+  │
+  │ Best regards,
+  │ [Your Name]
+  │ Accounts Payable Coordinator
+  └──────────────────────────────────────────────────
+
+────────────────────────────────────────────────────────────
+  Stage 4 — Loading simulated partner responses
+────────────────────────────────────────────────────────────
+  Al Futtaim LLC: response received
+  Noon Commerce: response received
+  Emirates NBD: response received
+  Aramex International: response received
+
+────────────────────────────────────────────────────────────
+  Stage 5 — Parsing responses (LLM) + re-validating (deterministic)
+────────────────────────────────────────────────────────────
+  Al Futtaim LLC: extracted ['trn', 'peppol_id', 'address'] → status: resolved
+  Noon Commerce: extracted ['trn', 'address'] → status: partially_resolved
+  Emirates NBD: extracted ['peppol_id'] → status: partially_resolved
+  Aramex International: extracted ['trn'] → status: partially_resolved
+
+============================================================
+  TRADING PARTNER DATA COLLECTION — FINAL REPORT
+============================================================
+
+  Al Futtaim LLC  [RESOLVED]
+    ✓ All required fields present and valid.
+
+  Carrefour UAE  [BLOCKED — NO EMAIL]
+    ✗ Cannot send outreach — no valid email address on file.
+    ✗ address: unstructured — must include comma-separated components (street, city, postal code): got 'Abu Dhabi'
+
+  Noon Commerce  [PARTIALLY RESOLVED]
+    Fields resolved after response:
+    ✓ address: Noon Commerce Building, Dubai Silicon Oasis, Dubai, UAE 341041
+    ✓ trn: 100312345600039
+    Fields still unresolved:
+    ✗ peppol_id: missing
+
+  Emirates NBD  [PARTIALLY RESOLVED]
+    Fields resolved after response:
+    ✓ peppol_id: 0088:9876543210123
+    Fields still unresolved:
+    ✗ address: unstructured — must include comma-separated components (street, city, postal code): got 'Sheikh Zayed Road Dubai'
+
+  Aramex International  [PARTIALLY RESOLVED]
+    Fields resolved after response:
+    ✓ trn: 100312345600028
+    Fields still unresolved:
+    ✗ peppol_id: missing
+    ✗ address: missing
+
+============================================================
+  SUMMARY
+============================================================
+  Total partners:       5
+  Fully resolved:       1
+  Partially resolved:   3
+  Unresolved:           0
+  No response:          0
+  Blocked (no email):   1

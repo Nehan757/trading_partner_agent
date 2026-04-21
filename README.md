@@ -2,6 +2,12 @@
 
 An AI-native pipeline that automates structured data collection from trading partners for e-invoicing onboarding.
 
+---
+
+## **📄 See [`sample_output.log`](./sample_output.log) for a full end-to-end run — all 5 pipeline stages, generated outreach emails, parsed responses, and the final resolution report.**
+
+---
+
 ## Setup
 
 ```bash
